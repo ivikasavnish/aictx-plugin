@@ -1,0 +1,14 @@
+{
+  "name": "aictx",
+  "description": "Cross-AI session context tracker. Persist work state (todos, decisions, session history) across Claude Code, Cursor, Gemini CLI, and ChatGPT using a SQLite-backed CLI with live terminal dashboard. Never lose context between sessions or AI tools.",
+  "author": {
+    "name": "Servloci Private Ltd",
+    "email": "bizpowersolution@gmail.com",
+    "url": "https://github.com/ivikasavnish"
+  },
+  "version": "0.1.0",
+  "category": "productivity",
+  "keywords": ["context", "session", "memory", "todos", "cross-ai", "productivity"],
+  "repository": "https://github.com/ivikasavnish/aictx-plugin",
+  "license": "MIT"
+}
