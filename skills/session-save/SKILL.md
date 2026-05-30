@@ -1,16 +1,22 @@
 ---
 name: session-save
-description: >
-  This skill should be used when the user says "save session", "save context",
-  "save progress", "checkpoint", "save what we did", "end session", "wrap up",
-  "note down tasks", "update context", or when ending a significant work session.
-  Saves current work state to .ai-context/ so any AI can resume later.
+description: Save current session state to .ai-context/ using the aictx CLI for cross-AI context persistence.
+triggers:
+  - "save session"
+  - "save context"
+  - "save progress"
+  - "checkpoint"
+  - "save what we did"
+  - "end session"
+  - "wrap up"
+  - "note down tasks"
+  - "update context"
 ---
 
 # Session Save
 
 Persist the current session's work to `.ai-context/` using the `aictx` CLI.
-This enables any AI (Claude, Gemini, Cursor, ChatGPT) to resume exactly where work left off.
+Enables any AI (Claude, Gemini, Cursor, ChatGPT) to resume exactly where work left off.
 
 ## Step 1 — Check Initialization
 
@@ -26,7 +32,7 @@ aictx set url "<git remote or project URL>"
 
 ## Step 2 — Write Session Summary
 
-Compose a 1-3 sentence summary covering:
+Write a 1-3 sentence summary covering:
 - What was built/fixed/decided this session
 - Current state (working? broken? partial?)
 - Immediate next step
@@ -39,7 +45,7 @@ AI_TOOL=claude aictx save "<summary>"
 
 ## Step 3 — Sync Todos
 
-For any tasks mentioned this session that aren't already tracked:
+For tasks mentioned this session not already tracked:
 
 ```bash
 aictx todo add "<task text>" [priority 0-5]
@@ -50,7 +56,7 @@ aictx todo block <id>     # if stuck/waiting
 
 ## Step 4 — Record Key Decisions
 
-For any architectural or approach decisions made this session:
+For architectural or approach decisions made this session:
 
 ```bash
 aictx decide "<decision>" "<why — constraint or reason>"

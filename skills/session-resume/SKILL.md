@@ -1,12 +1,16 @@
 ---
 name: session-resume
-description: >
-  This skill should be used when the user says "resume", "resume session",
-  "what were we doing", "pick up where we left off", "load context",
-  "what's the status", "show tasks", "continue from last session",
-  "resume talent scraper", "resume <project>", or at the start of any session
-  in a directory that has .ai-context/. Also use when the user says "I might
-  forget" or "remind me later".
+description: Load prior work context from .ai-context/ and synthesize a session briefing so work continues without losing history.
+triggers:
+  - "resume"
+  - "resume session"
+  - "what were we doing"
+  - "pick up where we left off"
+  - "load context"
+  - "what's the status"
+  - "show tasks"
+  - "continue from last session"
+  - "resume <project name>"
 ---
 
 # Session Resume
@@ -29,7 +33,7 @@ the project is in a different directory.
 aictx resume
 ```
 
-Read the output carefully. It contains:
+Parse the output. It contains:
 - **Last sessions** — what was done, which AI tool did it
 - **In progress** — tasks actively being worked
 - **Open tasks** — backlog
