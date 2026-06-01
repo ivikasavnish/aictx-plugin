@@ -9,19 +9,27 @@ OS=$(uname -s | tr '[:upper:]' '[:lower:]')
 ARCH=$(uname -m)
 
 case "$OS" in
-  linux) ;;
-  *) echo "unsupported OS: $OS (only linux supported)"; exit 1 ;;
+  linux|darwin) ;;
+  msys*|mingw*|cygwin*) OS="windows" ;;
+  *) echo "unsupported OS: $OS"; exit 1 ;;
 esac
 
 case "$ARCH" in
-  x86_64) ARCH="amd64" ;;
+  x86_64)       ARCH="amd64" ;;
   aarch64|arm64) ARCH="arm64" ;;
   *) echo "unsupported arch: $ARCH"; exit 1 ;;
 esac
 
 BASE="https://github.com/ivikasavnish/aictx/releases/download/${VERSION}"
-BINARY="aictx-${OS}-${ARCH}"
-DEST="${HOME}/.local/bin/aictx"
+
+if [ "$OS" = "windows" ]; then
+  BINARY="aictx-${OS}-${ARCH}.exe"
+  DEST="${HOME}/.local/bin/aictx.exe"
+else
+  BINARY="aictx-${OS}-${ARCH}"
+  DEST="${HOME}/.local/bin/aictx"
+fi
+
 TMP=$(mktemp)
 SUM=$(mktemp)
 
@@ -35,9 +43,17 @@ curl -fsSL "${BASE}/${BINARY}"        -o "$TMP"
 curl -fsSL "${BASE}/${BINARY}.sha256" -o "$SUM"
 
 echo "verifying checksum..."
-# sha256 file contains just the hash (no filename)
 EXPECTED=$(cat "$SUM")
-ACTUAL=$(sha256sum "$TMP" | awk '{print $1}')
+
+# macOS ships shasum not sha256sum
+if command -v sha256sum >/dev/null 2>&1; then
+  ACTUAL=$(sha256sum "$TMP" | awk '{print $1}')
+elif command -v shasum >/dev/null 2>&1; then
+  ACTUAL=$(shasum -a 256 "$TMP" | awk '{print $1}')
+else
+  echo "no sha256 tool found — skipping checksum (install coreutils or shasum)"
+  ACTUAL="$EXPECTED"
+fi
 
 if [ "$EXPECTED" != "$ACTUAL" ]; then
   echo "checksum mismatch — aborting"
