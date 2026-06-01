@@ -51,8 +51,8 @@ if command -v sha256sum >/dev/null 2>&1; then
 elif command -v shasum >/dev/null 2>&1; then
   ACTUAL=$(shasum -a 256 "$TMP" | awk '{print $1}')
 else
-  echo "no sha256 tool found — skipping checksum (install coreutils or shasum)"
-  ACTUAL="$EXPECTED"
+  echo "error: no sha256 tool found — install coreutils (Linux) or use macOS built-in shasum" >&2
+  exit 1
 fi
 
 if [ "$EXPECTED" != "$ACTUAL" ]; then
